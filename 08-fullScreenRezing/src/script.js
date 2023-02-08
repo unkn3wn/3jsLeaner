@@ -30,9 +30,50 @@ scene.add(mesh);
  * Sizes
  */
 const sizes = {
-  width: 800,
-  height: 600,
+  width: window.innerWidth,
+  height: window.innerHeight,
 };
+
+//This will allow the background to update so i can be full width and height at all times
+window.addEventListener("resize", () => {
+  // update sizes
+  sizes.width = window.innerWidth;
+
+  sizes.height = window.innerHeight;
+
+  // update camera (the aspect)
+  camera.aspect = sizes.width / sizes.height;
+  camera.updateProjectionMatrix();
+
+  //update renderer
+  renderer.setSize(sizes.width, sizes.height);
+
+  // to get rid of blurs
+  // renderer.setPixelRatio(window.devicePixelRatio)
+
+  // sets min pixel ratio
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+});
+
+window.addEventListener("dblclick", () => {
+  // prefixed version for safari
+  const fullscreenElement =
+    document.fullscreenElement || document.webkitFullscreenElement;
+
+  if (!fullscreenElement) {
+    if (canvas.requestFullscreen) {
+      canvas.requestFullscreen();
+    } else if (canvas.webkitRequestFullscreen) {
+      canvas.webkitRequestFullscreen();
+    }
+  } else {
+    if (document.exitFullscreen) {
+      document.exitFullscreen();
+    } else if (document.webkitExitFullscreen) {
+      document.webkitExitFullscreen();
+    }
+  }
+});
 
 /**
  * Camera
